@@ -1,0 +1,108 @@
+<!--Liste erstellen-->
+<br/>
+<h1 style="text-align: center;" *ngIf="!isLoggedIn()">Bitte logge dich vorher ein</h1>
+<div *ngIf="isLoggedIn()" class="ui text container">
+    <br/>
+    <br/>
+    <section>
+        <div class="ui large centered blue header">Einkaufliste erstellen</div>
+        <div class="ui small header">Erstelle hier deine Liste mit deinen benötigten Artikeln!
+            <p>Wir leiten diese dann an unsere Freiwilligen weiter, welche die Einkäufe erledigen werden.</p></div>
+    </section>
+    <!--Formular-->
+    <form [formGroup]="shoppinglistForm" (ngSubmit)="submitForm()">
+        <input type="hidden" name="id">
+        <!--Titel-->
+        <div class="ui centered segment">
+            <div class="ui large form" id="shoppinglistTabContent">
+                <div class="two fields">
+                    <div class="field">
+                        <label for="slTitle">Name der Liste:* </label>
+                        <input type="text" id="slTitle" formControlName="title">
+                        <div *ngIf="errors.title" class="invalid-feedback d-block">{{errors.title}}</div>
+                    </div>
+                    <!--Bis wann soll Einkauf erledigt sein?-->
+                    <div class="field">
+                        <label for="slTitle" >Einkäufe erledigen bis:* </label>
+                        <input type="date" id="slDeadline" class="form-control" formControlName="until">
+                        <div *ngIf="errors.until" class="invalid-feedback d-block">{{errors.until}}</div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade show active" id="articles" role="tabpanel" aria-labelledby="shoppingitemsTab">
+                    <div formArrayName="articles" class="default-margin">
+                        <div class="col">
+                            <div *ngIf="!articles?.controls" class="alert alert-info">
+                                <strong>Einen kleinen Moment Geduld bitte...</strong>Einträge werden geladen
+                            </div>
+                            <div *ngIf="!articles?.controls && !articles?.controls.length" class="alert alert-info">
+                                <strong>Information: </strong> Es wurde derzeit noch keine Einkaufsliste
+                                hinzugefügt.
+                            </div>
+                        </div>
+                        <div class="row" *ngFor="let control of articles?.controls; index as i; last as la; first as fi"
+                             [formGroupName]="i">
+                            <input type="hidden" name="id">
+                            <!--Produktname-->
+                            <div class="field">
+                                <label for="slProductname">Produktname:*</label>
+                                <input type="text" id="slProductname" class="form-control" formControlName="title">
+                                <div *ngIf="errors.title" class="invalid-feedback d-block">{{errors.title}}</div>
+                            </div>
+
+                            <!--Menge-->
+                            <div class="field">
+                                <label for="slAmount">Menge*:</label>
+                                <input type="text" id="slAmount" class="form-control" formControlName="amount">
+                                <div *ngIf="errors.amount" class="invalid-feedback d-block">{{errors.amount}}</div>
+                            </div>
+
+                            <!--Max.Preis-->
+                            <div class="field">
+                                <label for="slMax_price">Max. Preis in Euro:</label>
+                                <input type="text" id="slMax_price" class="form-control" formControlName="max_price">
+                            </div>
+
+                            <!--Artikel hinzufügen-->
+                            <span *ngIf="la; else showRemoveAction">
+                                    <button type="button" (click)="addShoppinglistitemControl()">
+                            <i class="plus icon"></i>
+                                    </button> <i> mehr Artikel hinzu</i>
+                                </span>
+                            <!--Artikel entfernen-->
+                            <ng-template #showRemoveAction>
+                                <button type="button"
+                                        (click)="removeShoppinglistitemControl(i)">
+                                    <i class="minus icon"></i>
+                                </button>
+                                <i> Artikel entfernen</i>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+
+                <div class="tab-pane fade" id="messages" role="tabpanel" aria-labelledby="messagesTab">
+                    <!--Feld für Zusatzinformationen-->
+                    <input type="hidden" name="id">
+                    <div class="field">
+                        <div class="field">
+                            <label for="slMessage">Zusatzinformationen:</label>
+                            <textarea class="form-control" id="slMessage"
+                                      formControlName="text"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Buttons-->
+        <div class="footer-button-container">
+            <button type="submit" class="ui button" [disabled]="shoppinglistForm.invalid">Liste Speichern</button>
+            <button type="button" class="ui button" [routerLink]="'/shopping_lists'">
+                zurück zur Übersicht
+            </button>
+        </div>
+    </form>
+</div>
+<br/>
+<br/>

@@ -1,0 +1,26 @@
+<!--offene Einkäufe Listenübersicht die einzelnen Einträge-->
+<br/>
+<h1 style="text-align: center;" *ngIf="!isLoggedIn()">Bitte logge dich vorher ein</h1>
+<div *ngIf="isLoggedIn()" class ="ui text container">
+    <div class="ui container">
+        <hr/>
+        <div class="ui message">
+            <b>Listenname:</b> {{shoppingList.title}} <br/>
+            <b>Erstellt von: </b>{{shoppingList.user.lastname}} {{shoppingList.user.firstname}}
+            <br/>
+            <br/>
+            <i>Bis wann: {{shoppingList.until | date: 'dd.MM.yyyy'}}</i>
+        </div>
+    </div>
+
+    <!--Buttons-->
+    <button type="button" class="ui button" *ngIf="shoppingList.state.name=='inprogress'"
+            (click)="setListToDone(shoppingList)">Abschließen
+    </button>
+    <button type="button" class="ui button" *ngIf="shoppingList.state.name=='open'"
+            (click)="setListInProgress(shoppingList)" [routerLink]="'/shoppinglists'">Übernehmen
+    </button>
+    <button type="button" class="ui button" [routerLink]="['../shopping_lists', shoppingList?.id]">Details
+    </button>
+
+</div>

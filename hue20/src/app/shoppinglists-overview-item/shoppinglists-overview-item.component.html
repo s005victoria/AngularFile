@@ -1,0 +1,28 @@
+<!--Hilfesuchender Einträge offen/übernommen/abgeschlossen-->
+<br/>
+<h1 style="text-align: center;" *ngIf="!isLoggedIn()">Bitte logge dich vorher ein</h1>
+<div *ngIf="isLoggedIn()"  class="ui text container">
+    <div class="ui container">
+        <hr/>
+        <div class="ui message">
+            <b>Listenname:</b> {{shoppingList.title}}<br/>
+            <span *ngIf="shoppingList.volunteer; else showDefaultNonVolunteer">
+                <b> Einkauf übernommen von: </b>{{shoppingList.volunteer.firstname}} {{shoppingList.volunteer.lastname}}
+            </span>
+            <br/>
+            <br/>
+            <i>Bis wann: {{shoppingList.until | date: 'dd.MM.yyyy'}}</i>
+        </div>
+            <ng-template #showDefaultNonVolunteer>
+               <i style="background-color:lightblue; color: gray;">Der Einkauf wurde derzeit noch von keinem übernommen</i>
+            </ng-template>
+
+    </div>
+        <button type="button" class="ui button" [routerLink]="['../shopping_lists', shoppingList?.id]">Details</button>
+
+</div>
+
+<!--
+<button type="button" class="ui button" (click)="showShoppinglistDetails(shoppinglist)">Detailansicht</button>
+-->
+

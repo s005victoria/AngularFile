@@ -1,0 +1,28 @@
+<!--Übersicht der offenen Einkaufslisten auf Helfendenseite-->
+
+<br/>
+<h1 style="text-align: center;" *ngIf="!isLoggedIn()">Bitte logge dich vorher ein</h1>
+<br/>
+<br/>
+<br/>
+<div *ngIf="isLoggedIn()" class="ui text container">
+    <div class="ui large blue header">Offene Einkaufslisten</div>
+    <div class="ui medium header">In dieser Ansicht findest du alle offenen Einkaufslisten,
+        die von noch keinem Freiwilligen übernommen worden sind.
+        </div>
+
+            <div class="ui container">
+        <span *ngFor="let shoppinglist of shoppinglists">
+                <div *ngIf="shoppinglist.state.name=='open' && !shoppinglist.volunteer"
+                     class="bs-shoppinglist-overview-vol-item" [shoppingList]="shoppinglist"></div>
+        </span>
+                <!--während dem Ladevorgang dass Leute wissen, dass Listen laden-->
+                    <div *ngIf="!shoppinglists" class="alert alert-info">
+                        <strong>Information: </strong> Einkaufslisten werden geladen...
+                    </div>
+                    <div *ngIf="false" class="alert alert-info">
+                      <strong>Information: </strong> Derzeit gibt es keine offene Einkäufe
+                    </div>
+            </div>
+        </div>
+

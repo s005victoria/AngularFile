@@ -1,0 +1,115 @@
+<!--detailansicht von den listen-->
+<br/>
+<h1 style="text-align: center;" *ngIf="!isLoggedIn()">Bitte logge dich vorher ein</h1>
+
+<div class="ui text container" *ngIf="ShoppingList && isLoggedIn()">
+
+
+    <br/>
+    <div class="ui large blue header">Einkaufliste: {{ShoppingList?.title}}</div>
+    <span><b>Status:</b> {{ShoppingList?.state?.name}}</span><br/>
+    <span *ngIf="ShoppingList?.volunteer; else showDefaultNonVolunteer">
+        <b>Übernommen von:</b>  {{ShoppingList?.volunteer.lastname}} {{ShoppingList?.volunteer.firstname}}
+     </span>
+    <br/>
+    <i style="color: grey; background-color: lightyellow;"><b>Dieser Einkauf wurde noch nicht erledigt</b></i><br/>
+    <ng-template #showDefaultNonVolunteer></ng-template>
+    <br/>
+    <span><b>Zu erledigen bis: </b>{{ShoppingList?.until | date: 'dd.MM.yyyy'}}</span><br>
+
+    <!--weitere mögliche Verlinkungen
+    <a class="nav-link active" id="shoppingitemsTab" data-toggle="tab" href="#shoppingitems" role="tab"
+       aria-controls="articles" aria-selected="true">
+        <span>Einkaufsliste</span>
+    </a>
+    <a class="nav-link" id="messagesTab" data-toggle="tab" href="#messages" role="tab"
+       aria-controls="comments" aria-selected="false">
+        <i class="fas fa-comments front-icon"></i>
+        <span>Zusatzinformation zum Einkauf</span>
+    </a>-->
+
+
+    <div class="tab-content" id="shoppinglistTabContent">
+        <div class="tab-pane fade show active" id="shoppingitems" role="tabpanel"
+             aria-labelledby="shoppingitemsTab">
+            <table class="ui celled blue table ">
+                <thead class="center aligned">
+                <tr>
+                    <th class="center aligned">Menge</th>
+                    <th class="center aligned">Artikelname</th>
+                    <th class="center aligned">Wie viel darf der Artikel kosten</th>
+                </tr>
+                </thead>
+                <tbody *ngFor="let article of ShoppingList?.articles">
+                <tr>
+                    <td class="center aligned">{{article.amount}}</td>
+                    <td class="center aligned">{{article.title}}</td>
+                    <td class="center aligned">{{article.max_price}} €</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="messages" role="tabpanel" aria-labelledby="messagesTab">
+            <div *ngFor="let comment of ShoppingList?.comments" class="message-container">
+                <div class="message-card">
+                    <div>
+                        <span><b>Erstellt von:</b> {{comment.user?.lastname}} {{comment.user?.firstname}}</span>
+                    </div>
+                    <div>
+                        <span><b>Erstellt am: </b>{{comment.created_at  |  date: 'dd.MM.yyyy HH:mm'}} </span>
+                    </div>
+                </div>
+                <span><b>Zusatzinfo:</b>  {{comment.text}}</span>
+
+            </div>
+            <form *ngIf="authService.isLoggedIn()" [formGroup]="shoppinglistForm" (ngSubmit)="submitForm()">
+                <input type="hidden" name="id"><br/>
+                <input type="hidden" name="id">
+                <label for="slMessage"><b>Noch eine Nachricht hinzufügen? </b></label><br/>
+                <textarea id="slMessage" formControlName="textComment" style="width: 235px; height: 70px;"></textarea>
+                <br/>
+                <button type="submit" class="ui small button" [disabled]="shoppinglistForm.invalid">Nachricht
+                    speichern
+                </button>
+                <br/>
+                <br/>
+            </form>
+        </div>  <hr/>
+        <div class="tab-pane fade" id="bills" role="tabpanel" aria-labelledby="billsTab">
+            <form *ngIf="authService.isLoggedIn() && ShoppingList?.state?.name!='open' && ShoppingList?.volunteer?.id == authService.getCurrentUserId()"
+                  [formGroup]="shoppinglistFormAmount" (ngSubmit)="submitFormAmount()">
+                <input type="hidden" name="id">
+                <input type="hidden" name="id">
+
+
+                    <label for="totalAmount"><b> Gesamtbetrag des Einkaufs: </b></label><br/>
+                    <input type="text" class="form-control" style="width: 50px;" id="totalAmount"
+                           formControlName="total_amount"> €
+             <br/>
+                <button type="submit" class="ui small button" [disabled]="shoppinglistFormAmount.invalid">Betrag speichern</button>
+            </form>
+<br/>
+        </div>
+    </div>
+    <!--buttons-->
+    <label for="totalAmountView" id="totalAmountView">
+        <b><i>Soviel wurde für den Einkauf ausgegeben:</i></b>
+    {{ShoppingList?.total_amount?null:0.00}} € </label>
+    <br/>
+
+    <div *ngIf="authService.isLoggedIn() && !authService.isCurrentUserVolunteer()">
+        <button type="button" class="ui button"
+                *ngIf="ShoppingList?.state?.name=='open' && authService.isLoggedIn() && !authService.isCurrentUserVolunteer()"
+                [routerLink]="['../../editList', ShoppingList?.id]">Liste bearbeiten
+        </button>
+        <button type="button" class="ui button"
+                *ngIf="ShoppingList?.state?.name=='open' && authService.isLoggedIn() && !authService.isCurrentUserVolunteer()"
+                (click)="removeShoppinglist()">Liste löschen
+        </button>
+
+    <button type="button" class="ui button" [routerLink]="'/shopping_lists'">Zurück zur Übersicht</button>
+</div>
+</div>
+<br/>
+<br/>
+<br/>

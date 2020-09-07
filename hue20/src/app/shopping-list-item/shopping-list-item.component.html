@@ -1,0 +1,26 @@
+<!--version 1 der liste-->
+<div class="ui text container">
+    <div class="col">
+        <i [ngClass]="{'icon-status-open fa-clock': ShoppingList.state.name=='open',
+                   'icon-status-inprogress fa-shopping-cart': ShoppingList.state.name=='inprogress',
+                    'icon-status-done fa-check': ShoppingList.state.name=='done',
+                    'fas': ShoppingList.state.name}"></i>
+        <div class="card">
+            <div class="card-body">
+                <h1>Spätestens zu erledigen bis {{ShoppingList.until | date: 'dd.MM.yyyy'}}</h1><hr>
+                <h5 class="card-title">{{ShoppingList.title}}</h5>
+                <p class="card-text">
+                            <span *ngIf="ShoppingList.volunteer; else showDefaultNonVolunteer">
+                                Einkauf wurde übernommen von: <b>{{ShoppingList.volunteer.firstname}} {{ShoppingList.volunteer.lastname}}</b>
+                            </span>
+                    <ng-template #showDefaultNonVolunteer>
+                        Dieser Einkauf wurde zurzeit noch von niemandem übernommen
+                    </ng-template>
+                </p>
+                <!--
+                <button type="button" class="btn btn-primary" (click)="showShoppinglistDetails(shoppinglist)">Detailansicht</button>
+                -->
+            </div>
+        </div>
+    </div>
+</div>

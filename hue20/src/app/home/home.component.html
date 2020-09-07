@@ -1,0 +1,59 @@
+<!--components sind grundbausteine der angular-anwendung,
+sie haben in sich geschlossene aufgaben zu erfüllen-->
+<div class="ui text container">
+    <br/>
+    <br/>
+    <br/>
+    <section>
+        <div class="ui container">
+        <div class="ui large blue header">Sich gegenseitig in der Coronazeit unterstützen</div>
+        <div class="ui medium header">Care4You, die Shopping-Hilfsapp für Senioren</div>
+        <p>In der derzeitigen Situation sollen ältere Personen Einkäufe durch jüngere Personen übernehmen
+            können.
+            Hilfesuchenden, älteren Personen soll es ermöglicht werden, dass Sie eine „Einkaufsliste“ online
+            stellen können – dies soll natürlich möglichst einfach ermöglicht werden. Angemeldete Freiwillige sollen
+            einfach bekannt geben können, dass Sie einen gewissen Einkauf übernehmen möchten. </p>
+    </div>
+    </section>
+
+
+    <!--wenn User eingeloggt ist und sie/er einen Einkauf für jemand übernehmen möchte-->
+    <section *ngIf="authService.isLoggedIn()">
+        <br/>
+        <h4><i>Was möchtest du machen?</i></h4>
+
+
+                <a [routerLink]="'/createList'" *ngIf="!authService.isCurrentUserVolunteer()">
+                    <div class="ui button center floated">
+                        <span>Einkaufsliste erstellen</span>
+                    </div>
+                </a>
+
+                <!--wenn User eingeloggt ist und sie/er einen Einkauf für jemand übernehmen möchte-->
+                <a [routerLink]="'/openShoppinglists'" *ngIf="authService.isCurrentUserVolunteer()">
+                    <div class="ui button">
+                        <span>Offene Einkaufslisten</span>
+                    </div>
+                </a>
+
+            <!--wenn User eingeloggt ist und sie/er Hilfe bei ihren/seinen Einkäufen benötigt-->
+
+                <a [routerLink]="'/shopping_lists'" *ngIf="authService.isLoggedIn()">
+                    <div class="ui button">
+                        <span>Meine Einkaufslisten</span>
+                    </div>
+                </a>
+    </section>
+    <br/>
+    <section *ngIf="!authService.isLoggedIn()">
+
+
+                <a [routerLink]="'/login'">
+                    <div class="ui button">
+                        <span>Anmelden</span>
+                    </div>
+                </a>
+
+
+    </section>
+</div>

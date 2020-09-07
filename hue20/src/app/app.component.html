@@ -1,0 +1,17 @@
+<header>
+    <div class="ui four item tabs menu">
+        <!-- Links -->
+        <a class="item" routerLink="home" routerLinkActive="active">Home</a>
+        <a class="item" *ngIf="authService.isCurrentUserVolunteer() && isLoggedInAsSearcher()"
+           routerLink="openShoppinglists" routerLinkActive="active">Offene Einkaufslisten</a>
+        <a class="item" *ngIf="isLoggedInAsSearcher()" routerLink="shopping_lists" routerLinkActive="active">Meine Einkaufslisten</a>
+        <a class="item" *ngIf="!authService.isCurrentUserVolunteer() && isLoggedIn()" routerLink="createList"
+           routerLinkActive="active">Liste erstellen</a>
+        <a class="item" *ngIf="isLoggedIn()" (click)="authService.logout()" routerLink="login"
+           routerLinkActive="active">{{getLoginLabel()}}</a>
+        <a class="item" *ngIf="!isLoggedIn()" routerLink="login" routerLinkActive="active">{{getLoginLabel()}}</a>
+
+    </div>
+</header>
+<!--hier werden dynamisch templates geladen-->
+<router-outlet></router-outlet>

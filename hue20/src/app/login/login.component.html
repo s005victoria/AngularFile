@@ -1,0 +1,46 @@
+
+    <div class="ui text container" *ngIf="!isLoggedIn()">
+        <div class="ui large form">
+            <!--Überschriften-->
+            <div class="d-xs-block d-sm-none text-center mb-4">
+                <br/>
+                <br/>
+                <div class="ui large centered blue header">--- Hier anmelden ---</div>
+            </div>
+            <br/>
+            <br/>
+            <!--Login Formular-->
+            <!--Mail-Feld-->
+            <div class="ui center aligned grid">
+            <form [formGroup]="loginForm" (ngSubmit)="login()">
+                <div class="ui centered segment">
+                        <div class="ui large form">
+                            <label for="email">Mail-Adresse:*</label>
+                            <input type="email" id="email" class="form-control" formControlName="email">
+                            <div *ngIf="loginForm.get('email').invalid &&
+                         (loginForm.get('email').dirty || loginForm.get('email').touched) &&
+                         loginForm.get('email').hasError('required')" class="invalid-feedback d-block">
+                                <i style="color:grey;"> Hier bitte Mail Adresse eingeben!</i>
+
+                            </div>
+            <br/>
+                <!--Passwort-Feld-->
+                <div class="row">
+                        <div class="form-group">
+                            <label for="password">Passwort:*</label>
+                            <input type="password" id="password" class="form-control" formControlName="password">
+                            <div *ngIf="loginForm.get('password').invalid &&
+                        (loginForm.get('password').dirty || loginForm.get('password').touched)" class="invalid-feedback d-block">
+                              <i style="color:grey;"> Hier bitte Passwort eingeben!</i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <br/>
+                    <button type="submit" class="ui button" [disabled]="loginForm.invalid">Login</button>
+                </div>
+
+            </form>
+        </div>
+        </div>
+</div>

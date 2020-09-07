@@ -1,0 +1,80 @@
+<!--Überblick Gesammt über Listeneinträge auf Helferinnenseite (offen/abgeschlossen/übernommene)-->
+<br/>
+<h1 style="text-align: center;" *ngIf="!isLoggedIn()">Bitte logge dich vorher ein</h1>
+<div *ngIf="isLoggedIn()" class="ui text container">
+    <br/>
+    <br/>
+    <div class="ui large blue header">Hier findest du eine Übersicht deiner Einkaufslisten</div>
+    <div class="ui medium header">Hier hast du die Möglichkeit zu sehen, welche Listen bereits übernommen, welche noch nicht abgeschlossen und
+   welche bereits erledigt wurden:</div>
+
+    <!--Offene Einkaufslisten-->
+    <span *ngIf="!authService.isCurrentUserVolunteer()">
+        <div class="ui small header">
+            <i>>>Offene Einkaufslisten</i></div>
+            <span *ngFor="let shoppingList of shoppinglists">
+                    <a *ngIf="shoppingList.state.name=='open' && (shoppingList.user.id === authService.getCurrentUserId())"
+                       class="bs-shoppinglists-overview-item"
+                       [shoppingList]="shoppingList"
+                       [routerLink]="shoppingList.id"></a>
+            </span>
+
+        <!--Info zu den offenen Listen-->
+            <div *ngIf="!shoppinglists" class="alert alert-info">
+                <strong>Information: </strong> Einkaufslisten werden geladen...
+            </div>
+            <div *ngIf="false" class="alert alert-info">
+                <strong>Information: </strong> Derzeit gibt es keine offenen Einkäufe
+            </div>
+        </span>
+
+    <!--Übernommene Einkaufslisten-->
+    <div class="ui small header"><i>>>Übernommene Einkaufslisten</i>
+    </div>
+    <span *ngFor="let shoppingList of shoppinglists">
+            <span *ngIf="authService.isCurrentUserVolunteer(); else showListOfSearcher">
+                    <div *ngIf="shoppingList.state.name=='inprogress' && shoppingList.volunteer.id == authService.getCurrentUserId()"
+                         class="bs-shoppinglist-overview-vol-item"
+                         [shoppingList]="shoppingList"></div>
+                </span>
+            <ng-template #showListOfSearcher>
+                <a *ngIf="shoppingList.state.name=='inprogress' && shoppingList.user.id == authService.getCurrentUserId()"
+                   class="bs-shoppinglists-overview-item"
+                   [shoppingList]="shoppingList"
+                   [routerLink]="shoppingList.id"></a>
+            </ng-template>
+        </span>
+
+    <!--Info zu den übernommenen Listen-->
+    <div *ngIf="!shoppinglists" class="alert alert-info">
+        <strong>Information: </strong> Einkaufslisten werden geladen...
+    </div>
+    <div *ngIf="false" class="alert alert-info">
+        <strong>Information: </strong> Derzeit gibt es keine übernommene Einkäufe
+    </div>
+
+    <!--Abgeschlossene Einkaufslisten-->
+    <div class="ui small header"><i>>>Abgeschlossene Einkaufslisten</i></div>
+    <span *ngFor="let shoppingList of shoppinglists">
+            <span *ngIf="authService.isCurrentUserVolunteer(); else showListOfSearcher">
+                    <div *ngIf="shoppingList.state.name=='done' && shoppingList.volunteer.id == authService.getCurrentUserId()"
+                         class="bs-shoppinglist-overview-vol-item"
+                         [shoppingList]="shoppingList"></div>
+                </span>
+            <ng-template #showListOfSearcher>
+                <a *ngIf="shoppingList.state.name=='done' && shoppingList.user.id == authService.getCurrentUserId()"
+                   class="bs-shoppinglists-overview-item"
+                   [shoppingList]="shoppingList"
+                   [routerLink]="shoppingList.id"></a>
+            </ng-template>
+        </span>
+
+    <!--Information zu den abgeschlossenen Listen-->
+    <div *ngIf="!shoppinglists" class="alert alert-info">
+        <strong><b>Information: </b></strong> Einkaufslisten werden geladen...
+    </div>
+    <div *ngIf="false" class="alert alert-info">
+        <strong><b>Information: </b></strong> Derzeit gibt es keine abgeschlossenen Einkäufe
+    </div>
+</div>
+<br/>
